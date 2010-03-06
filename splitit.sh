@@ -5,7 +5,7 @@ failedcue=0
 export failedcue
 tmpcue="/tmp/tmp_cue_${USER}_`date +%N`.cue"
 [ -n "$NOSPLIT" ] && cueiname="-o -iname *.cue"
-find -L "$DIR" -iname "*.ape" -o -iname "*.flac" -o -iname "*.wv" $cueiname -type f | {
+find -L "$DIR" -iname "*.ape" -o -iname "*.flac" -o -iname "*.wv" -o -iname "*.wav" $cueiname -type f | {
 while read f; do
 	base=${f##"$DIR"}
 	base=${base##/}
