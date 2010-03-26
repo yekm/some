@@ -74,6 +74,9 @@ find -L "$DIR" -name "*.$ext" -type f | while read input_file ; do
 	mp3v2)
 		lame -V2 -m d "$p" "$output_file"
 	;;
+	mp3v3)
+		lame -V3 -m d "$p" "$output_file"
+	;;
 	mp3v4)
 		lame -V4 -m d "$p" "$output_file"
 	;;
