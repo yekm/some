@@ -21,7 +21,7 @@ while read f; do
 		cue=${f%.*}.cue
 		echo -n "new cue $cue... "
 		if [ ! -f "$cue" ] ; then
-			cue=$(find "$dir" -iname "*.cue")
+			cue=$(find -L "$dir" -iname "*.cue")
 			echo -n "new cue $cue... "
 			if [ $(echo -n "$cue" | wc -c) -eq 0 -o $(echo "$cue" | wc -l) -ne 1 ]; then
 				echo "cant find cuesheet or found more than 1. skipping."
