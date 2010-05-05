@@ -7,7 +7,7 @@ export DISPLAY=:0
 
 case "$cmd" in
 play)
-	if ps -e | grep smplayer
+	if pgrep smplayer
 	then
 		smplayer -send-action play_or_pause
 	else
@@ -15,7 +15,7 @@ play)
 	fi
 ;;
 stop)
-	if ps -e | grep smplayer
+	if pgrep smplayer
 	then
 		smplayer -send-action fullscreen
 	else
@@ -23,7 +23,7 @@ stop)
 	fi
 ;;
 bwd)
-	if ps -e | grep smplayer
+	if pgrep smplayer
 	then
 		smplayer -send-action play_prev
 	else
@@ -32,7 +32,7 @@ bwd)
 	fi
 ;;
 fwd)
-	if ps -e | grep smplayer
+	if pgrep smplayer
 	then
 		smplayer -send-action play_next
 	else
@@ -44,7 +44,7 @@ repeat)
 ;;
 
 b1)
-	if ps -e | grep smplayer
+	if pgrep smplayer
 	then
 		smplayer -send-action rewind1
 	else
@@ -52,7 +52,7 @@ b1)
 	fi
 ;;
 b2)
-	if ps -e | grep smplayer
+	if pgrep smplayer
 	then
 		smplayer -send-action forward1
 	else
@@ -60,10 +60,9 @@ b2)
 	fi
 ;;
 b3)
-	killall mplayer
 ;;
 b4)
-	if ps -e | grep smplayer
+	if pgrep smplayer
 	then
 		smplayer -send-action rewind1
 	else
@@ -71,7 +70,7 @@ b4)
 	fi
 ;;
 b5)
-	if ps -e | grep smplayer
+	if pgrep smplayer
 	then
 		smplayer -send-action forward1
 	else
@@ -79,6 +78,7 @@ b5)
 	fi
 ;;
 b6)
+	killall mplayer
 ;;
 b7)
 	smplayer -send-action dec_zoom
@@ -97,12 +97,10 @@ b+10)
 ;;
 
 vol+)
-	qdbus org.kde.kmix /Mixer0 increaseVolume PCM:0
-#	qdbus org.kde.kmix /Mixer1 increaseVolume Master:0
+	amixer -c 0 set PCM 2dB+
 ;;
 vol-)
-	qdbus org.kde.kmix /Mixer0 decreaseVolume PCM:0
-#	qdbus org.kde.kmix /Mixer1 decreaseVolume Master:0
+	amixer -c 0 set PCM 2dB-
 ;;
 esac
 
