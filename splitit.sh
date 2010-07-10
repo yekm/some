@@ -15,7 +15,8 @@ while read f; do
 	echo "::: $f"
 	dir=$(dirname "$f")
 	cue="$f.cue"
-	[ ! -f "$cue" ] && echo "$f" | grep "\.wv$" && wvunpack -c "$f" >"$cue"
+	[ ! -f "$cue" ] && echo "$f" | grep "\.wv$" && `wvunpack -c "$f" >"$cue-unpack"` && cue="$cue-unpack"
+#	if [ $? == 0 ] cue="$cue-unpack"
 	if [ ! -f "$cue" ] ; then
 		# cut the extention of source file
 		cue=${f%.*}.cue
