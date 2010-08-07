@@ -19,7 +19,7 @@ find -L "$DIR" -name "*.$ext" -type f | while read input_file ; do
 	dn=$(dirname "$base")
 	mkdir -p "$dn"
 	case "$format" in
-	ogg7|ogg_voice)
+	ogg5|ogg7|ogg_voice)
 		output_file="${base%%.$ext}".ogg
 		coder="oggenc"
 	;;
@@ -61,6 +61,9 @@ find -L "$DIR" -name "*.$ext" -type f | while read input_file ; do
 	case "$format" in
 	ogg7)
 		oggenc -Q -q 7 --advanced-encode-option impulse_noisetune=-7 "$p" -o "$output_file"
+	;;
+	ogg5)
+		oggenc -Q -q 5 --advanced-encode-option impulse_noisetune=-7 "$p" -o "$output_file"
 	;;
 	ogg_6c)
 		oggenc -r -C 6 -R 48000 -q 7 --advanced-encode-option impulse_noisetune=-7 "$p" -o "$output_file"
