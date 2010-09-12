@@ -1,6 +1,10 @@
 #!/bin/sh
 
 cmd="$1"
+
+c=1
+amixer -c 0 controls | grep "PCM Playback Volume" && c=0
+
 log=~/some/log.ir.sh
 #echo "`date` $cmd" >>$log
 export DISPLAY=:0
@@ -11,7 +15,8 @@ play)
 	then
 		smplayer -send-action play_or_pause
 	else
-		qdbus org.kde.amarok /Player PlayPause
+		#qdbus org.kde.amarok /Player PlayPause
+		mocp --toggle-pause
 	fi
 ;;
 stop)
@@ -19,7 +24,8 @@ stop)
 	then
 		smplayer -send-action fullscreen
 	else
-		qdbus org.kde.amarok /Player Stop
+		#qdbus org.kde.amarok /Player Stop
+		mocp --stop
 	fi
 ;;
 bwd)
@@ -27,8 +33,9 @@ bwd)
 	then
 		smplayer -send-action play_prev
 	else
-		qdbus org.kde.amarok /Player Prev
+		#qdbus org.kde.amarok /Player Prev
 #		qdbus org.kde.amarok /Player ShowOSD
+		mocp --previous
 	fi
 ;;
 fwd)
@@ -36,8 +43,9 @@ fwd)
 	then
 		smplayer -send-action play_next
 	else
-		qdbus org.kde.amarok /Player Next
+		#qdbus org.kde.amarok /Player Next
 #		qdbus org.kde.amarok /Player ShowOSD
+		mocp --next
 	fi
 ;;
 repeat)
@@ -48,7 +56,8 @@ b1)
 	then
 		smplayer -send-action rewind1
 	else
-		qdbus org.kde.amarok /Player Backward 2
+		#qdbus org.kde.amarok /Player Backward 2
+		mocp --seek -2
 	fi
 ;;
 b2)
@@ -56,7 +65,8 @@ b2)
 	then
 		smplayer -send-action forward1
 	else
-		qdbus org.kde.amarok /Player Forward 2
+		#qdbus org.kde.amarok /Player Forward 2
+		mocp --seek 2
 	fi
 ;;
 b3)
@@ -66,7 +76,8 @@ b4)
 	then
 		smplayer -send-action rewind1
 	else
-		qdbus org.kde.amarok /Player Backward 20
+		#qdbus org.kde.amarok /Player Backward 20
+		mocp --seek -20
 	fi
 ;;
 b5)
@@ -74,7 +85,8 @@ b5)
 	then
 		smplayer -send-action forward1
 	else
-		qdbus org.kde.amarok /Player Forward 20
+		#qdbus org.kde.amarok /Player Forward 20
+		mocp --seek 20
 	fi
 ;;
 b6)
@@ -97,10 +109,10 @@ b+10)
 ;;
 
 vol+)
-	amixer -c 0 set PCM 2dB+
+	amixer -c $c set PCM 2dB+
 ;;
 vol-)
-	amixer -c 0 set PCM 2dB-
+	amixer -c $c set PCM 2dB-
 ;;
 esac
 
