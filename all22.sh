@@ -71,34 +71,34 @@ find -L "$DIR" -name "*.$ext" -type f | while read input_file ; do
 		oggenc -Q -q 5 --advanced-encode-option impulse_noisetune=-7 "$p" -o "$output_file" &
 	;;
 	ogg_6c)
-		oggenc -r -C 6 -R 48000 -q 7 --advanced-encode-option impulse_noisetune=-7 "$p" -o "$output_file"
+		oggenc -r -C 6 -R 48000 -q 7 --advanced-encode-option impulse_noisetune=-7 "$p" -o "$output_file" &
 	;;
 	ogg_voice)
-		oggenc -Q -b 64 "$p" -o "$output_file"
+		oggenc -Q -b 64 "$p" -o "$output_file" &
 	;;
 	mp3v1)
-		lame -V1 -m d "$p" "$output_file"
+		lame -V1 -m d "$p" "$output_file" &
 	;;
 	mp3v2)
-		lame -V2 -m d "$p" "$output_file"
+		lame -V2 -m d "$p" "$output_file" &
 	;;
 	mp3v3)
-		lame -V3 -m d "$p" "$output_file"
+		lame -V3 -m d "$p" "$output_file" &
 	;;
 	mp3v4)
-		lame -V4 -m d "$p" "$output_file"
+		lame -V4 -m d "$p" "$output_file" &
 	;;
 	mp3_b)
-		lame -b 8 -B 32 -V6 -m m "$p" "$output_file"
+		lame -b 8 -B 32 -V6 -m m "$p" "$output_file" &
 	;;
 	flac)
-		flac "$p" -o "$output_file"
+		flac "$p" -o "$output_file" &
 	;;
 	wav)
-		cat "$p" > "$output_file"
+		cat "$p" > "$output_file" &
 	;;
 	speex)
-		speexenc -u --vbr --comp 10 "$p" "$output_file"
+		speexenc -u --vbr --comp 10 "$p" "$output_file" &
 	;;
 	esac
 	[ -n "$REMOVE" ] && rm -v "$input_file"
