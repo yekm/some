@@ -1,6 +1,8 @@
 #!/bin/sh
 ext="$1"
-tasks=2
+tasks=$(grep MHz /proc/cpuinfo| wc -l)
+#tasks=$(( $tasks + 1 ))
+echo "tasks $tasks"
 format=ogg7
 [ -z "$ext" ] && echo "Usage: $0 <extention> [format=ogg7]" && exit 1
 #[ -n "$2" ] && dir="$2/"
@@ -8,9 +10,10 @@ format=ogg7
 [ -z "$DIR" ] && DIR="."
 
 p_dir="/tmp/mplayer_pipes"
-p="/tmp/mplayer_pipes/fifo.$$"
+p0="/tmp/mplayer_pipes/fifo.$$"
 mkdir $p_dir 2>/dev/null
-mkfifo $p 2>/dev/null
+
+i=0
 
 find -L "$DIR" -name "*.$ext" -type f | while read input_file ; do
 #	base=$(basename "$input_file")
@@ -56,14 +59,16 @@ find -L "$DIR" -name "*.$ext" -type f | while read input_file ; do
 	[ -n "$FAKE" ] && continue
 	[ -f "$output_file" -a -z "$OVERWRITE" ] && continue
 
-	mplayer -vc null -vo null -ao pcm:waveheader:fast:file="$p" $MOPTS "$input_file" &
+	p=$p0-$i
+	mkfifo $p 2>/dev/null
+	mplayer -really-quiet -vc null -vo null -ao pcm:waveheader:fast:file="$p" $MOPTS "$input_file" &
 
 	case "$format" in
 	ogg7)
-		oggenc -Q -q 7 --advanced-encode-option impulse_noisetune=-7 "$p" -o "$output_file"
+		oggenc -Q -q 7 --advanced-encode-option impulse_noisetune=-7 "$p" -o "$output_file" &
 	;;
 	ogg5)
-		oggenc -Q -q 5 --advanced-encode-option impulse_noisetune=-7 "$p" -o "$output_file"
+		oggenc -Q -q 5 --advanced-encode-option impulse_noisetune=-7 "$p" -o "$output_file" &
 	;;
 	ogg_6c)
 		oggenc -r -C 6 -R 48000 -q 7 --advanced-encode-option impulse_noisetune=-7 "$p" -o "$output_file"
@@ -97,9 +102,15 @@ find -L "$DIR" -name "*.$ext" -type f | while read input_file ; do
 	;;
 	esac
 	[ -n "$REMOVE" ] && rm -v "$input_file"
+	i=$(( i + 1 ))
+#	[ $(( $i % $tasks )) -eq 0 ] && wait
+	while [ $(( $(jobs | wc -l) / 2 )) -gt $tasks  ] ; do
+		sleep 1
+	done
+
 done
 
-rm "$p"
+rm "$p0"*
 
 echo
 
