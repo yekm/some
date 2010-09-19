@@ -14,9 +14,10 @@ find -L "$from" -iname "$what" -type f | while read f ; do
 	[ -n $FAKE ] && echo -e "$f ---> $to/$dn/$fn"
 	case "$TODO" in
 	thumb)
-		[ -z $FAKE ] && [ ! -f "$to/$dn/$fn" ] && convert "$f" -resize x400 "$to/$dn/$fn"
-		fn="small_$fn"
-		[ -z $FAKE ] && [ ! -f "$to/$dn/$fn" ] && convert "$f" -resize x20 "$to/$dn/$fn"
+		o1="$to/$dn/$fn"
+		o2="$to/$dn/small_$fn"
+		[ -z $FAKE ] && [ ! -f "$o1" ] && convert "$f" -resize x400 "$o1"
+		[ -z $FAKE ] && [ ! -f "$o2" ] && convert "$o1" -resize x20 "$o2"
 	;;
 	*)
 		[ -z $FAKE ] && cp -v "$f" "$to/$dn"
