@@ -110,6 +110,7 @@ find -L "$DIR" -name "*.$ext" -type f | while read input_file ; do
 
 done
 
+wait
 rm "$p0"*
 
 echo
