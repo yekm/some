@@ -1,5 +1,14 @@
 #!/bin/sh
-for r in "*.log" "*.m3u" "Thumb.jpg" "folder.jpg" "Thumbs.db" "Info.txt" ; do
-	find . -iname "$r"
-	[ -z "$FAKE" ] && find . -iname "$r" -exec rm '{}' +
-done
+[ -n $DOIT ] && cmd="rm -v"
+[ -z $DOIT ] && cmd="echo"
+find . \( \
+	   -iname '*.log' \
+	-o -iname '*.m3u' \
+	-o -iname 'Thumb.jpg' \
+	-o -iname 'folder.jpg' \
+	-o -iname 'Thumbs.db' \
+	-o -iname 'Info.txt' \
+	-o -iname '00 - pregap.flac' \
+	\) \
+	-print0 | xargs -0 -n1 $cmd
+
