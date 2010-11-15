@@ -9,7 +9,7 @@ find -L "$from" -iname "$what" -type f | while read f ; do
 		# if destination folder do not exist...
 		[ -z $create ] && break # ...skip
 		# ...or create and proceed
-		mkdir "$to/$dn"
+		mkdir -p "$to/$dn"
 	fi
 	[ -n $FAKE ] && echo -e "$f ---> $to/$dn/$fn"
 	case "$TODO" in
