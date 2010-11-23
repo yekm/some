@@ -7,7 +7,7 @@ find -L "$from" -iname "$what" -type f | while read f ; do
 	dn=$(dirname "$base")
 	if [ ! -d "$to/$dn" ] ; then
 		# if destination folder do not exist...
-		[ -z $create ] && break # ...skip
+		[ -z $create ] && continue # ...skip
 		# ...or create and proceed
 		mkdir -p "$to/$dn"
 	fi
