@@ -4,7 +4,7 @@
 echo CUE = $CUE
 echo DIR = $DIR
 n=0
-find "$DIR" -iname "*.flac" | sort | while read f; do
+find "$DIR" -maxdepth 1 -iname "*.flac" | sort | while read f; do
 	echo "$f" | grep "pregap.flac" && continue
 	let "n+=1"
 	echo "$f :: $n"
