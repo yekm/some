@@ -24,6 +24,11 @@ find -L "$from" -iname "$what" -type f | while read f ; do
 		echo -e "$f \t\t $to/$dn/$tofn"
 		[ -z $FAKE ] && cp -v "$f" "$to/$dn/$tofn"
 	;;
+    tojpeg)
+        jpeg="$to/$dn/${fn%.*}.jpg"
+        echo -e "$f \t\t $jpeg"
+        gm convert "$f" -quality 90 "$jpeg"
+    ;;
 	*)
 		echo -e "$f \t\t $to/$dn"
 		[ -z $FAKE ] && cp -v "$f" "$to/$dn"
