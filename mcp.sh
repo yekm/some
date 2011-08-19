@@ -2,7 +2,11 @@
 
 [ -z "$to" ] && to=.
 
-find -L "$from" -iname "$what" -type f | while read f ; do
+list=$(find -L "$from" -iname "$what" -type f)
+count=$(echo "$list" | wc -l)
+echo "$list" | while read f ; do
+    let "c = c + 1"
+    echo -n "$c/$count "
     fn=$(basename "$f")
     base=${f##$from}
     base=${base##/}
@@ -21,10 +25,21 @@ find -L "$from" -iname "$what" -type f | while read f ; do
         [ -z $FAKE ] && [ ! -f "$o2" ] && convert "$o1" -resize x20 "$o2"
     ;;
     fat)
-        tofn=$(echo "$fn" | sed -e 's/[^a-z0-9A-Z\-\(\)]/_/g')
+        tofn=$(echo -n "$fn" | perl -pe 's/[^a-z0-9A-Z\-\(\) \.]/_/g')
         #todn=$(echo "$dn" | tr -d '\/:*?<>|')
-        echo -e "$f \t\t $to/$dn/$tofn"
-        [ -z $FAKE ] && cp -v "$f" "$to/$dn/$tofn"
+        t="$to/$dn/$tofn"
+        if [ -f "$t" ]; then
+            if [ $(du "$f" | cut -f1) -gt $(du "$t" | cut -f1) ] ; then
+                [ -z $FAKE ] && cp "$f" "$t"
+                echo -n "copied"
+            else
+                echo -n "skipped"
+            fi
+        else
+            [ -z $FAKE ] && cp "$f" "$t"
+            echo -n "copied"
+        fi
+        echo " $f -> $t"
     ;;
     tojpeg)
         jpeg="$to/$dn/${fn%.*}.jpg"
