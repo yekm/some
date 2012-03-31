@@ -61,7 +61,14 @@ find -L "$DIR" -name "*.$ext" -type f | while read input_file ; do
 
 	p=$p0-$i
 	mkfifo $p 2>/dev/null
-	mplayer -really-quiet -vc null -vo null -ao pcm:waveheader:fast:file="$p" $MOPTS "$input_file" &
+	case "$ext" in
+	flac)
+        flac -f -d "$input_file" -o "$p" &
+	;;
+	*)
+        mplayer -really-quiet -vc null -vo null -ao pcm:waveheader:fast:file="$p" $MOPTS "$input_file" &
+    ;;
+    esac
 
 	case "$format" in
 	ogg7)
@@ -107,6 +114,7 @@ find -L "$DIR" -name "*.$ext" -type f | while read input_file ; do
 	while [ $(( $(jobs | wc -l) / 2 )) -gt $tasks  ] ; do
 		sleep 1
 	done
+	wait
 
 done
 
