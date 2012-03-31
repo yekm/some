@@ -12,6 +12,6 @@ all=0
 while [ $(pgrep $task | wc -l) -gt $tasks  ] ; do
     echo -n w
     sleep $d
-    [ -n "$timeout" ] && all=$(echo $d+$all | bc) && [ $(echo "$all>$timeout" | bc) = "1" ] && echo timeout $timeout && exit 2
+    [ "$timeout" != 0 ] && all=$(echo $d+$all | bc) && [ $(echo "$all>$timeout" | bc) = "1" ] && echo timeout $timeout && exit 2
 done
 
