@@ -4,7 +4,7 @@
 failedcue=0
 export failedcue
 tmpcue="/tmp/tmp_cue_${USER}_`date +%N`.cue"
-[ -n "$NOSPLIT" ] && cueiname="-o -iname *.cue"
+[ -n "$NOSPLIT" ] && cueiname='-o -iname "*.cue"'
 find -L "$DIR" -iname "*.ape" -o -iname "*.flac" -o -iname "*.wv" -o -iname "*.wav" $cueiname -type f | {
 while read f; do
 	base=${f##"$DIR"}
@@ -43,10 +43,20 @@ dn	$dn"
 		if [ -z "$NOSPLIT" ]; then
 #			if shnsplit -f "$cue" -t "%a - %n - %t" -o flac "$f" -d "$dn"; then
 			if shnsplit -O never -f "$cue" -t "%n - %t" -o flac "$f" -d "$dn"; then
-		   		[ -n "$REMOVE" ] && rm -v "$f" "$cue"
+		   		[ -n "$REMOVE" ] && rm -v "$f"
 			fi
 		fi
-		[ -z "$NOTAG" ] && DIR="$dn" CUE="$cue" FAKE=$FAKE cue2metaflac.sh
+		if [ -z "$NOTAG" ]; then
+            if DIR="$dn" CUE="$cue" FAKE=$FAKE cue2metaflac.sh; then
+                [ -n "$REMOVE" ] && rm -v "$cue"
+            fi
+        fi
+		if [ -z "$NOMCP" ]; then
+            from="$dir" what="*.jpg" to="$dn" create=1 mcp.sh
+            from="$dir" what="*.tif" to="$dn" create=1 mcp.sh
+            from="$dir" what="*.tiff" to="$dn" create=1 mcp.sh
+            from="$dir" what="*.png" to="$dn" create=1 mcp.sh
+        fi
 	fi
 done
 echo "cant find $failedcue cuesheets"
