@@ -70,7 +70,8 @@ echo "$list" | while read f ; do
                 echo " skipped"
 #            fi
         else
-            [ -z $FAKE ] && oggenc -Q -q 7 -o "$t" "$f"
+            [ -z $FAKE ] && oggenc -Q -q 7 -o "$t" "$f" &
+            pwait.sh oggenc 3
             echo " copied"
         fi
     ;;
