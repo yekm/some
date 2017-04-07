@@ -1,6 +1,6 @@
 #!/bin/sh
 [ -n $DOIT ] && cmd="rm -v"
-[ -z $DOIT ] && cmd="echo"
+[ -z $DOIT ] && cmd="echo Will delete "
 find . \( \
 	   -iname '*.log' \
 	-o -iname '*.m3u' \

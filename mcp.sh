@@ -55,7 +55,8 @@ echo "$list" | while read f ; do
     ogg7)
         tofn=$(echo -n "$fn" | iconv -c -t cp1251 | iconv -c -f cp1251 | perl -pe 's/[^абвгдеёжзийклмнопрстуфхцчшщэюыяьъАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЭЮЯЫЬЪa-z0-9A-Z\-\(\) \.]/_/g')
         t="$to/$dn/$tofn"
-        t=$(echo "$t" | sed -e 's/\.flac$/\.ogg/i'); # sed can into "case insensitive"
+        #t=$(echo "$t" | sed -e 's/\.flac$/\.ogg/i'); # sed can into "case insensitive"
+        t=${t%.*}.ogg
         echo -n "$f -> $t"
 #        p="/tmp/ccp.pipe"
 #        mkfifo $p 2>/dev/null
@@ -70,8 +71,9 @@ echo "$list" | while read f ; do
                 echo " skipped"
 #            fi
         else
-            [ -z $FAKE ] && oggenc -Q -q 7 -o "$t" "$f" &
-            pwait.sh oggenc 3
+            #[ -z $FAKE ] && nice oggenc -Q -q 7 -o "$t" "$f" &
+            [ -z $FAKE ] && nice ffmpeg -loglevel error -i "$f" -c:a libvorbis -q:a 6 "$t" </dev/null &
+            pwait.sh ffmpeg 4
             echo " copied"
         fi
     ;;
