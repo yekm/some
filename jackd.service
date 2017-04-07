@@ -1,0 +1,19 @@
+[Unit]
+Description=JACK
+After=sound.target
+Before=mpd.target
+
+#[Slice]
+#ControlGroup=cpu:/
+#ControlGroupAttribute=cpu.rt_runtime_us 500000
+
+[Service]
+User=yekm
+Group=yekm
+ExecStart=/usr/bin/jackd -R -dalsa -r48000 -p1024 -M -D -d hw:ST,0
+LimitRTPRIO=infinity
+LimitMEMLOCK=infinity
+
+[Install]
+WantedBy=multi-user.target
+

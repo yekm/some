@@ -1,0 +1,21 @@
+[Unit]
+Description="alsa_out XDA2 for jackd"
+After=jackd
+Requires=jackd
+Before=mpd
+
+#[Slice]
+#ControlGroup=cpu:/
+#ControlGroupAttribute=cpu.rt_runtime_us 500000
+
+[Service]
+User=yekm
+Group=yekm
+#ExecStart=/usr/bin/alsa_out -d hw:XDA2,0 -r48000 -j XDA2
+ExecStart=/opt/some/alsa_out.sh
+LimitRTPRIO=infinity
+LimitMEMLOCK=infinity
+
+[Install]
+WantedBy=multi-user.target
+

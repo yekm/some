@@ -1,0 +1,21 @@
+[Unit]
+Description="alsa_out HDA Intel PCH, ALC892"
+After=jackd
+Requires=jackd
+Before=mpd
+
+#[Slice]
+#ControlGroup=cpu:/
+#ControlGroupAttribute=cpu.rt_runtime_us 500000
+
+[Service]
+User=yekm
+Group=yekm
+#ExecStart=/usr/bin/alsa_out -d hw:PCH,0 -r48000 -j onboard
+ExecStart=/opt/some/alsa_out.sh
+LimitRTPRIO=infinity
+LimitMEMLOCK=infinity
+
+[Install]
+WantedBy=multi-user.target
+

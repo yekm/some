@@ -1,0 +1,16 @@
+[Unit]
+Description="set of lv2 plugins"
+After=jackd
+Requires=jackd
+Before=mpd
+
+[Service]
+User=yekm
+Group=yekm
+ExecStart=/opt/some/lv2audio.sh
+LimitRTPRIO=infinity
+LimitMEMLOCK=infinity
+
+[Install]
+WantedBy=multi-user.target
+
